@@ -1,14 +1,53 @@
-<!--
- * @Date: 2024-12-15 17:24:31
- * @LastEditors: yangyehan 1958944515@qq.com
- * @LastEditTime: 2024-12-15 18:37:06
- * @FilePath: /vscode/hash加密算法/readme_eng.md
- * @Description: 
--->
+# 1.Batch Process Script - Version 2.0
 
-# Hash Encryption Algorithm - SHA-256
+## 1.1 Updates
 
-## Implementation Code
+### Version Upgrades
+1. **Support for Batch Processing of Student Files**  
+   - Automatically load multiple student Excel files from a specified folder.
+   - Process each row step by step, and add a new column in the original file to store the encrypted data.
+
+2. **Real-Time Row Progress Updates**  
+   - Utilize the `tqdm` progress bar library to clearly display file and row processing progress, enhancing user experience.
+
+3. **Automatic Matching of Encryption Seeds**  
+   - Extract the year from the first four digits of the student ID and automatically match the corresponding salt value in the `seed` file, ensuring consistency and security in data encryption.
+
+4. **Unmatched Data Prompts**  
+   - Automatically record student IDs that do not match a salt value and print them out after the task is completed, allowing for easy checking and correction.
+
+5. **Optimized Data Structure**  
+   - The encrypted column will be inserted before the original column being encrypted (e.g., "student ID"), keeping the table structure clear and logical.
+
+6. **Enhanced Error Handling**  
+   - If a file fails to be read or saved, it will be skipped, and detailed error information will be output without affecting the processing of other files.
+
+---
+
+## 2.Usage Instructions
+
+### 2.1 Environment Setup
+1. Install dependencies:
+```bash
+   pip install pandas openpyxl tqdm
+```
+2. Ensure the hash_256.py (Version 1.0) file is in the same directory as the main script.
+3. Format requirements for seed.xlsx:
+   - The file must contain two columns: year and seed, representing the year and the corresponding salt value, respectively.
+4. Place the student Excel files into the specified folder (e.g., ./student/), with the following requirements:
+   - The files must include the column to be encrypted (e.g., “student ID”).
+   - If the column to be encrypted is not “student ID,” modify the encrypt_col parameter in batch_process.py.
+5. Run the script:
+   
+```bash
+   python batch_process.py
+```
+
+---
+
+## 3.Hash Encryption Algorithm - SHA-256 — version 1.0
+
+### 3.1 Implementation Code
 
 ```python
 import hashlib
@@ -47,12 +86,12 @@ if __name__ == "__main__":
     print(f"Original Information: {private_info}")
     print(f"Encrypted Information: {encrypted_result}")
 ```
-### Example Output
+### 4. Example Output
 
 Original Information: 2021213038  
 Encrypted Information: 69cb2854b108c36c078efb6bc1bd08c0ef3768a6e9d6af204a0b7ca18015dbcf
 
-### Description
+### 5. Description
 
 1.	Hash Algorithm:
 	- SHA-256 is used, a common and secure one-way hashing algorithm. It produces a fixed-length 64-character hexadecimal string as output.
@@ -60,7 +99,7 @@ Encrypted Information: 69cb2854b108c36c078efb6bc1bd08c0ef3768a6e9d6af204a0b7ca18
 2.	Security Recommendations:
 	- Ensure the seed is a random and unpredictable string to avoid reduced security due to weak salt values (e.g., dictionary words).
 
-### Parameter Type Information
+### 6. Parameter Type Information
 
 - Input:
 	- private_info: any (supports str, int, float, bool, list, tuple, dict, set, object)
@@ -68,7 +107,7 @@ Encrypted Information: 69cb2854b108c36c078efb6bc1bd08c0ef3768a6e9d6af204a0b7ca18
 - Output:
 	- encrypted_info: str
 
-### Hash Algorithm Length Restrictions
+### 7. Hash Algorithm Length Restrictions
 
 Below is a table summarizing the theoretical input size limits for common hash algorithms (measured in bits):
 | **Hash Algorithm** | **Input Length Limit**                  | **Output Length (Bits)** |
@@ -78,7 +117,7 @@ Below is a table summarizing the theoretical input size limits for common hash a
 | SHA-256            | 2⁶⁴ - 1 bits (approx. 2 EB)            | 256 bits                 |
 | SHA-512            | 2¹²⁸ - 1 bits (virtually infinite)      | 512 bits                 |
 
-### Input Length Notes
+### 8. Input Length Notes
 
 - No Practical Input Length Limit:
 Modern hash algorithms (e.g., SHA-256, SHA-512) have no practical input length restrictions as they process data in chunks.
@@ -87,7 +126,7 @@ While the algorithms theoretically accept infinite input lengths, processing ver
 - Implementation Constraints:
 Specific programming libraries or environments may impose additional input size limits.
 
-### Summary
+### 9. Summary
 
 This implementation combines sensitive data (private_info) with a salt (seed) to generate a secure hash using the SHA-256 algorithm. It supports various data types as input and ensures data security through one-way encryption. The algorithm produces consistent and predictable output, making it suitable for desensitization and data anonymization.
 
